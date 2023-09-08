@@ -31,7 +31,7 @@ public class LoadBalancerServer {
     public static void main(String[] args) throws Exception {
         // Add some backend servers for demonstration purposes
         BACKENDS.add("http://localhost:9090");
-//        BACKENDS.add("http://localhost:8082");
+        BACKENDS.add("http://localhost:9091");
 //        BACKENDS.add("http://localhost:8083");
 
         // Start the HTTP client
@@ -53,6 +53,9 @@ public class LoadBalancerServer {
                 // Create a new request to the backend server
                 Request proxyRequest = CLIENT.newRequest(backend + target);
 
+                // Explicitly set the request method (e.g., POST, GET, PUT, etc.)
+                proxyRequest.method(request.getMethod()); // This line sets the method explicitly
+
                 // Copy the headers and content from the original request
 //                proxyRequest.header(headers -> headers.addAll(request.getHeaderNames(), name -> request.getHeaders(name)));
 
@@ -63,6 +66,7 @@ public class LoadBalancerServer {
                     Enumeration<String> headerValues = request.getHeaders(headerName);
                     while (headerValues.hasMoreElements()) {
                         String headerValue = headerValues.nextElement();
+//                        System.out.println(headerName + " : " + headerValue);
                         proxyRequest.header(headerName, headerValue);
                     }
                 }
@@ -81,6 +85,7 @@ public class LoadBalancerServer {
                     response.setStatus(proxyResponse.getStatus());
                     response.setContentType(proxyResponse.getMediaType());
                     response.getOutputStream().write(proxyResponse.getContent());
+                    System.out.println(request.getMethod() + " " + request.getPathInfo() + " " + proxyResponse.getStatus());
 
                     // Mark the request as handled
                     baseRequest.setHandled(true);
