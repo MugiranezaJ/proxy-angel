@@ -19,7 +19,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class LoadBalancerServer {
 
-    // A list of backend servers to balance the load
     private static final List<String> BACKENDS = new ArrayList<>();
 
     // A counter to keep track of the current backend server
@@ -32,7 +31,6 @@ public class LoadBalancerServer {
         // Add some backend servers for demonstration purposes
         BACKENDS.add("http://localhost:9090");
         BACKENDS.add("http://localhost:9091");
-//        BACKENDS.add("http://localhost:8083");
 
         // Start the HTTP client
         CLIENT.start();
@@ -90,7 +88,6 @@ public class LoadBalancerServer {
                     // Mark the request as handled
                     baseRequest.setHandled(true);
                 } catch (Exception e) {
-                    // Handle any exceptions that may occur
                     e.printStackTrace();
                     response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
                 }
